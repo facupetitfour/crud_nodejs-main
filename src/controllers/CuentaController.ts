@@ -49,6 +49,7 @@ class CuentaController {
 
     return devolverCuenta
   }
+  
   async deletehandle(request: Request, response: Response) {
     const { id } = request.body;
 
@@ -58,6 +59,27 @@ class CuentaController {
       await deleteCuentaService.delete(id).then(() => {
         response.render("message", {
           message: "Cuenta eliminado correctamente"
+        });
+      });
+    } catch (err) {
+      response.render("message", {
+        message: `Error al eliminar Cuenta: ${err.message}`
+      });
+    }
+  }
+  async deletehandleMiAccount(request: Request, response: Response, next) {
+    const id  = request.params.id;
+
+    const deleteCuentaService = new CuentaService();
+
+    try {
+      await deleteCuentaService.delete(id).then(() => {
+        request.logout(function(err) {
+          if (err) { return next(err); }
+          response.redirect('/login');
+        });
+        response.render("message", {
+          message: "Cuenta eliminada correctamente"
         });
       });
     } catch (err) {
@@ -96,6 +118,21 @@ class CuentaController {
 
       const user = await getCuentaDataService.getDataAccount(username);
       return res.render("1_miAccount", {
+        user: user
+      })
+    } catch (error) {
+      console.log(error)
+      return res.json({ error: error })
+    }
+
+  };
+  async getdatahandleMiAccountDelete(req, res) {
+    try {
+      let username = req.user.id;
+      const getCuentaDataService = new CuentaService();
+
+      const user = await getCuentaDataService.getDataAccount(username);
+      return res.render("2_deleteAccount", {
         user: user
       })
     } catch (error) {

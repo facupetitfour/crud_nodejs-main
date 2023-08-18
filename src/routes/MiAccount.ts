@@ -9,3 +9,6 @@ const cuentaController = new CuentaController();
 
 routerMiAccount.get('/me',cuentaController.getdatahandleMiAccount)
 routerMiAccount.post('/meUpdate/:id',cuentaController.updatehandle)
+routerMiAccount.get('/delete',cuentaController.getdatahandleMiAccountDelete)
+routerMiAccount.post('/delete/:id',cuentaController.deletehandleMiAccount)
+
