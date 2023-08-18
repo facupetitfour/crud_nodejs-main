@@ -14,6 +14,7 @@ import './lib/passport';
 const flash = require('connect-flash');
 var cookieParser = require('cookie-parser')
 import { Helpers } from "./lib/helpers";
+import { routerMiAccount } from "./routes/MiAccount";
 const protect = new Helpers;
 
 const app = express();
@@ -37,6 +38,7 @@ app.use("/user", protect.isLoggedIn ,routerUser);
 app.use("/productos", protect.isLoggedIn,routerProductos);
 app.use("/login", routerCuenta);
 app.use("/categoria",protect.isLoggedIn ,routerCategoria)
+app.use("/account",protect.isLoggedIn,routerMiAccount)
 
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
   if (err instanceof Error) {

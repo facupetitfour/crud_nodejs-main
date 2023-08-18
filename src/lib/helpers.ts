@@ -9,9 +9,7 @@ export class Helpers {
     };
 
     async matchContraseña(contraseña, contraseñaGuardada){
-
         return await bcryptjs.compare(contraseña, contraseñaGuardada)
-
     }
 
     isLoggedIn (req, res, next) {

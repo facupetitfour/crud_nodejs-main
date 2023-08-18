@@ -54,7 +54,7 @@ class UserController{
 
     const user = await getUserDataService.getData(id);
 
-    return response.render("edit", {
+    return response.render("1_miAccount", {
       user: user
     });
   }

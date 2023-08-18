@@ -2,6 +2,7 @@ import { response, Router } from "express";
 import { CuentaController } from "../controllers/CuentaController";
 import passport from "passport";
 import { Helpers } from "../lib/helpers";
+import { router } from "./Router";
 const protect = new Helpers;
 
 export const routerCuenta = Router();
@@ -43,7 +44,8 @@ routerCuenta.get('/logout', (req, res,next) => {
   res.redirect("/")
 });
 
-// routerCuenta.get("/edit" ,getCuentaDataController.getdatahandle);
+
+// routerCuenta.get("/miAccount" ,getCuentaDataController.getdatahandleMiAccount);
 
 // routerCuenta.post("/edit", updateCuentaController.updatehandle);
 

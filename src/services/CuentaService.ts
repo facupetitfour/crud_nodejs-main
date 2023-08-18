@@ -78,18 +78,24 @@ class CuentaService{
 
     return user;
   }
-
-
-  async update({ id,contraseña}: ICuenta) {
+  async getDataAccount(username) {
     const cuentasRepository = getCustomRepository(CuentasRepository);
 
+    const user = await cuentasRepository.findByIds(username);
+    // console.log("SERVICE: ",user[0].)
+    return user[0];
+  }
+
+  async update({ id,username,email,contraseña}: ICuenta) {
+    const cuentasRepository = getCustomRepository(CuentasRepository);
+    // console.log(id,username,email,contraseña)
     const user = await cuentasRepository
       .createQueryBuilder()
       .update(Cuenta)
-      .set({ contraseña})
+      .set({username,email,contraseña})
       .where("id = :id", { id })
       .execute();
-
+    console.log(user)
     return user;
 
   }
@@ -105,7 +111,7 @@ class CuentaService{
 
     if(!cuentaAlreadyExists){
       const contraseña_desencriptado = desencriptado.matchContraseña(contraseña, cuentaAlreadyExists.contraseña )
-      console.log (contraseña_desencriptado)
+      console.log("CONTRASEÑA cuenta service autenticacion:",contraseña_desencriptado)
       if (contraseña_desencriptado) {
       return true
       }else{

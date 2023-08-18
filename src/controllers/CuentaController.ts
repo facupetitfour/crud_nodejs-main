@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { CuentaService } from "../services/CuentaService";
+import { Helpers } from "../lib/helpers";
+const encriptado = new Helpers;
 
-class CuentaController{
+class CuentaController {
 
   async createhandle(request: Request, response: Response) {
     const { username, email, contraseña } = request.body;
@@ -35,14 +37,14 @@ class CuentaController{
   //     email,
   //     contraseña,
   //   })
- 
+
 
   // }
-  async devolverCuentahandle(request: Request){
-    const { username, email, contraseña} = request.body;
+  async devolverCuentahandle(request: Request) {
+    const { username, email, contraseña } = request.body;
     const devolverCuenta = new CuentaService();
 
-    devolverCuenta.devolverCuenta({username,email,contraseña})
+    devolverCuenta.devolverCuenta({ username, email, contraseña })
 
     return devolverCuenta
   }
@@ -84,17 +86,34 @@ class CuentaController{
 
     const user = await getCuentaDataService.getData(username);
 
-    return {user: user}
+    return { user: user }
   };
-  
+  async getdatahandleMiAccount(req, res) {
+    try {
+      let username = req.user.id;
+      const getCuentaDataService = new CuentaService();
+
+      const user = await getCuentaDataService.getDataAccount(username);
+      return res.render("1_miAccount", {
+        user: user
+      })
+    } catch (error) {
+      console.log(error)
+      return res.json({ error: error })
+    }
+
+  };
+
 
   async updatehandle(request: Request, response: Response) {
-    const { id, username, email, contraseña} = request.body;
-
+    let { username, email, contraseña } = request.body;
+    // console.log(request.params.id)
+    const id = request.params.id
+    contraseña = await encriptado.encryptContraseña(contraseña)
     const updateCuentaService = new CuentaService();
 
     try {
-      await updateCuentaService.update({ id, username, email, contraseña}).then(() => {
+      await updateCuentaService.update({id,username, email, contraseña }).then(() => {
         response.render("message", {
           message: "Cuenta actualizado correctamente"
         });
@@ -106,20 +125,19 @@ class CuentaController{
     }
 
   }
-  
-  async loginautentication(cuenta){
-    const {username, contraseña} = cuenta
+
+  async loginautentication(cuenta) {
+    const { username, contraseña } = cuenta
     const loginCuentaAutenticacion = new CuentaService;
 
-  
-      return await loginCuentaAutenticacion.autentication({
-        username,
-        contraseña
+    return await loginCuentaAutenticacion.autentication({
+      username,
+      contraseña
 
-      });
-    }
-    
+    });
   }
+
+}
 
 
 

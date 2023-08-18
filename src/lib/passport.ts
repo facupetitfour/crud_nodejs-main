@@ -30,18 +30,19 @@ passport.use('local.signin', new LocalStrategy ({
 
   const cuentasRepository = getCustomRepository(CuentasRepository);     
   const cuentaExist = await cuentasRepository.findOne({username})
-  console.log(cuentaExist)
+  console.log("lo que mando:",cuenta)
+  console.log("lo que encuentro",cuentaExist)
 
   if (!!cuentaExist) {
     const validPassword = await encriptado.matchContraseña(contraseña, cuentaExist.contraseña)
-
+    console.log(validPassword)
     if (validPassword) {
 
       console.log('Sesion iniciada')
       done(null, cuentaExist);
 
     } else {
-
+      // console.log("ELSE",cuentaExist)
       done(null, false);
     }
   } else {
