@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CuentaService } from "../services/CuentaService";
 import { Helpers } from "../lib/helpers";
+import passport from "passport";
 const encriptado = new Helpers;
 
 class CuentaController {
@@ -105,7 +106,7 @@ class CuentaController {
   };
 
 
-  async updatehandle(request: Request, response: Response) {
+  async updatehandle(request: Request, response: Response, next) {
     let { username, email, contraseña } = request.body;
     // console.log(request.params.id)
     const id = request.params.id
@@ -114,9 +115,11 @@ class CuentaController {
 
     try {
       await updateCuentaService.update({id,username, email, contraseña }).then(() => {
-        response.render("message", {
-          message: "Cuenta actualizado correctamente"
+        request.logout(function(err) {
+          if (err) { return next(err); }
+          response.redirect('/login');
         });
+        response.redirect('/login');
       });
     } catch (err) {
       response.render("message", {
